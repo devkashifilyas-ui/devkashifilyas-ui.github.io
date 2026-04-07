@@ -1,1 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kashif Ilyas — Mobile & Full-Stack Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+:root {
+  --bg:      #f8f7f4;
+  --white:   #ffffff;
+  --ink:     #1a1916;
+  --ink2:    #2d2b26;
+  --mid:     #8a887f;
+  --border:  #e4e2db;
+  --border2: #d0cdc4;
+  --blue:    #005eb8;
+  --blue2:   #e8f0fa;
+  --green:   #1a6b4a;
+  --green2:  #e6f4ed;
+  --amber:   #92400e;
+  --amber2:  #fef3c7;
+  --serif:   'Playfair Display', Georgia, serif;
+  --sans:    'DM Sans', sans-serif;
+  --mono:    'DM Mono', monospace;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
 
+/* HERO */
+.hero {
+  background: var(--ink);
+  color: #fff;
+  padding: 72px 0 64px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: rgba(255,255,255,.3);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: #fff;
+  max-width: 660px;
+  margin-bottom: 20px;
+}
+.hero-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,.55);
+  max-width: 560px;
+  line-height: 1.75;
+  margin-bottom: 36px;
+}
+.hero-sub strong { color: rgba(255,255,255,.85); font-weight: 500; }
+.hero-stats {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 580px;
+}
+.hstat {
+  flex: 1;
+  min-width: 120px;
+  padding: 18px 22px;
+  border-right: 1px solid rgba(255,255,255,.08);
+  text-align: center;
+}
+.hstat:last-child { border: none; }
+.hstat-n {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.hstat-l {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255,255,255,.35);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  line-height: 1.4;
+}
+
+/* SECTION */
+.section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+.section:last-of-type { border: none; }
+.sec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--mid);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.sec-desc {
+  font-size: 14px;
+  color: var(--mid);
+  max-width: 580px;
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+/* PRODUCT ROWS */
+.product-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+@media(max-width:620px){ .product-row { grid-template-columns: 1fr; } }
+.product-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+@media(max-width:720px){ .product-row.triple { grid-template-columns: 1fr 1fr; } }
+@media(max-width:480px){ .product-row.triple { grid-template-columns: 1fr; } }
+
+/* SCREEN CARD */
+.screen-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow .25s, transform .2s;
+}
+.screen-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+  transform: translateY(-2px);
+}
+.screen-img-wrap {
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+
+/* CSS MOCKUP SCREENS */
+.mock-screen {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.mock-screen.dark       { background: #0d0f12; }
+.mock-screen.shopify    { background: #1a2a1a; }
+.mock-screen.tracking   { background: #0f1e30; }
+.mock-screen.voip       { background: #12121e; }
+.mock-screen.grocery    { background: #0d1a10; }
+.mock-screen.checkout   { background: #f2f1ed; }
+.mock-screen.swipe      { background: #0a0a12; }
+
+.mock-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  position: absolute;
+  bottom: 14px;
+  left: 0; right: 0;
+  text-align: center;
+}
+
+/* Phone frame */
+.phone-frame {
+  width: 96px;
+  height: 172px;
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 8px;
+  gap: 5px;
+}
+.phone-notch {
+  width: 28px; height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin: 0 auto 2px;
+}
+.phone-line { height: 5px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+.phone-line.w80 { width: 80%; }
+.phone-line.w60 { width: 60%; }
+.phone-line.w45 { width: 45%; }
+.phone-line.accent-g { background: rgba(52,211,153,0.4); height: 4px; width: 55%; }
+.phone-line.accent-b { background: rgba(59,130,246,0.4); height: 4px; width: 50%; }
+.phone-metric {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  margin: 2px 0;
+}
+.phone-metric-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  letter-spacing: .1em;
+}
+
+/* Dashboard block */
+.dash-wrap {
+  width: 86%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 12px 13px;
+}
+.dash-row { display: flex; gap: 7px; margin-bottom: 6px; }
+.dash-block {
+  flex: 1;
+  height: 26px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.dash-block span { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.3); }
+.dash-block.hi span { color: rgba(52,211,153,0.65); }
+.dash-bar { height: 3px; background: rgba(255,255,255,0.04); border-radius: 2px; margin: 3px 0; }
+.dash-bar-fill { height: 100%; border-radius: 2px; }
+
+.screen-label {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.screen-name { font-size: 13px; font-weight: 600; color: var(--ink2); }
+.screen-tag {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+.tag-blue  { background: var(--blue2);   color: var(--blue);  border: 1px solid rgba(0,94,184,.2); }
+.tag-green { background: var(--green2);  color: var(--green); border: 1px solid rgba(26,107,74,.2); }
+.tag-amber { background: var(--amber2);  color: var(--amber); border: 1px solid rgba(146,64,14,.2); }
+.tag-dark  { background: #f0eeea; color: #4a4840; border: 1px solid #dedad2; }
+
+/* CONTRIBUTION STRIP */
+.contrib-strip {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin-top: 20px;
+}
+.cs-title {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  margin-bottom: 14px;
+}
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media(max-width:560px){ .cs-grid { grid-template-columns: 1fr; } }
+.cs-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--ink2);
+  line-height: 1.5;
+  padding: 9px 12px;
+  background: var(--bg);
+  border-radius: 5px;
+}
+.cs-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* TECH PILLS */
+.tech-bar { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 16px; }
+.tech {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  color: #6b6860;
+}
+.tech.hi {
+  background: var(--blue2);
+  border-color: rgba(0,94,184,.2);
+  color: var(--blue);
+}
+
+/* ACQUISITION BANNER */
+.acq-banner {
+  background: var(--ink);
+  border-radius: 10px;
+  padding: 32px 36px;
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+@media(max-width:560px){ .acq-banner { grid-template-columns: 1fr; } }
+.acq-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255,255,255,.3);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.acq-headline {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.acq-sub { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.65; }
+.acq-stat {
+  text-align: center;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 20px 28px;
+  white-space: nowrap;
+}
+.acq-n {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.acq-nl { font-size: 11px; color: rgba(255,255,255,.35); font-family: var(--mono); letter-spacing: .1em; }
+
+/* STACK */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media(max-width:580px){ .stack-grid { grid-template-columns: 1fr 1fr; } }
+.stack-cat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.stack-cat-name {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  margin-bottom: 12px;
+}
+.stack-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.si {
+  font-size: 11.5px;
+  padding: 3px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--ink2);
+}
+.si.primary {
+  background: var(--blue2);
+  border-color: rgba(0,94,184,.2);
+  color: var(--blue);
+  font-weight: 500;
+}
+
+/* FOOTER */
+.page-footer {
+  padding: 36px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-brand { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--ink); }
+.footer-sub { font-size: 11px; color: var(--mid); margin-top: 2px; }
+.footer-links { display: flex; gap: 8px; }
+.btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: all .15s;
+}
+.btn-dark { background: var(--ink); color: #fff; }
+.btn-dark:hover { background: var(--ink2); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border2); }
+.btn-outline:hover { border-color: var(--mid); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hero { animation: fadeUp .5s ease both; }
+.section { opacity:0; animation: fadeUp .5s ease forwards; }
+.section:nth-child(1){ animation-delay:.05s }
+.section:nth-child(2){ animation-delay:.1s }
+.section:nth-child(3){ animation-delay:.15s }
+.section:nth-child(4){ animation-delay:.2s }
+.screen-card { opacity:0; animation: fadeUp .4s ease forwards; }
+.screen-card:nth-child(1){ animation-delay:.06s }
+.screen-card:nth-child(2){ animation-delay:.12s }
+.screen-card:nth-child(3){ animation-delay:.18s }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">Kashif Ilyas · Mobile & Full-Stack Engineer · 14 Years</div>
+    <h1>14 years building mobile and full-stack systems shipped to App Store, Play Store, and production scale.</h1>
+    <p class="hero-sub">
+      Career spanning <strong>iOS, Android, Flutter, React Native</strong>, and full-stack backend engineering. Recent work covers real-time data pipelines, Shopify platform integrations across 100+ global carriers, and checkout optimisation systems. Previous engagements include 5 years building VOIP and real-time calling apps shipped globally on iOS and Android, and grocery e-commerce platforms across major US retail brands.
+    </p>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-n">14</div>
+        <div class="hstat-l">Years<br>experience</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">15+</div>
+        <div class="hstat-l">Apps shipped<br>both stores</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">$42M</div>
+        <div class="hstat-l">Platform<br>acquired</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">100+</div>
+        <div class="hstat-l">Carrier APIs<br>integrated</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: REAL-TIME PLATFORM WORK -->
+<div class="section">
+  <div class="wrap">
+    <div class="sec-label">Engagement 01 — E-Commerce Logistics Platform</div>
+    <div class="sec-title">Shopify Checkout & Real-Time Shipping Systems</div>
+    <p class="sec-desc">Full-stack engineering on an AI-driven e-commerce platform. Work spans backend API services in Python and Node.js, Shopify checkout extensions in React and TypeScript, and a shipment tracking system covering 100+ global carriers handling 10–20 real-time events per second per merchant.</p>
+
+    <div class="product-row triple">
+
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <div class="mock-screen dark">
+            <div class="dash-wrap">
+              <div class="dash-row">
+                <div class="dash-block hi"><span>98.4%</span></div>
+                <div class="dash-block"><span>12ms avg</span></div>
+              </div>
+              <div class="dash-bar"><div class="dash-bar-fill" style="width:88%;background:rgba(59,130,246,0.4)"></div></div>
+              <div class="dash-row" style="margin-top:3px">
+                <div class="dash-block"><span>Orders</span></div>
+                <div class="dash-block"><span>Carriers</span></div>
+                <div class="dash-block hi"><span>Live</span></div>
+              </div>
+              <div class="dash-bar"><div class="dash-bar-fill" style="width:72%;background:rgba(52,211,153,0.35)"></div></div>
+            </div>
+            <div class="mock-label">Carrier routing dashboard</div>
+          </div>
+        </div>
+        <div class="screen-label">
+          <span class="screen-name">Tracking Dashboard</span>
+          <span class="screen-tag tag-green">Live · 100+ carriers</span>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <div class="mock-screen checkout">
+            <div style="width:86%;background:#fff;border:1px solid #e4e2db;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:7px">
+              <div style="height:7px;background:#e8e6e0;border-radius:3px;width:58%"></div>
+              <div style="height:5px;background:#f0ede8;border-radius:3px;width:78%"></div>
+              <div style="height:5px;background:#f0ede8;border-radius:3px;width:42%"></div>
+              <div style="height:28px;background:#2d8a4e;border-radius:5px;display:flex;align-items:center;justify-content:center;margin-top:4px">
+                <span style="font-family:'DM Mono',monospace;font-size:10px;color:#fff;letter-spacing:.08em">COMPLETE ORDER</span>
+              </div>
+              <div style="display:flex;gap:5px;margin-top:2px">
+                <div style="flex:1;height:18px;background:#f5f3ef;border-radius:4px"></div>
+                <div style="flex:1;height:18px;background:#f5f3ef;border-radius:4px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-label">
+          <span class="screen-name">Checkout Extension</span>
+          <span class="screen-tag tag-green">React · TypeScript · Shopify</span>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <div class="mock-screen tracking">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-line w80"></div>
+              <div class="phone-metric">In Transit</div>
+              <div class="phone-metric-label">CARRIER UPDATE</div>
+              <div class="phone-line accent-g" style="margin:3px auto"></div>
+              <div class="phone-line w60"></div>
+              <div class="phone-line w45" style="margin-top:3px"></div>
+              <div class="phone-line accent-b" style="margin-top:5px"></div>
+            </div>
+            <div class="mock-label">Push notification · FCM</div>
+          </div>
+        </div>
+        <div class="screen-label">
+          <span class="screen-name">Status Notifications</span>
+          <span class="screen-tag tag-blue">FCM · Real-time</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="contrib-strip">
+      <div class="cs-title">What was built</div>
+      <div class="cs-grid">
+        <div class="cs-item"><div class="cs-dot"></div>Shipment tracking system covering 100+ global carriers — auto-identifies carrier from tracking number, fetches real-time updates, fires customer-facing status notifications</div>
+        <div class="cs-item"><div class="cs-dot"></div>Shopify checkout extensions in React and TypeScript — integrated with A/B testing, dynamic segmentation, and per-merchant personalisation logic</div>
+        <div class="cs-item"><div class="cs-dot"></div>Backend API services in Python handling real-time event streams at 10–20 events per second across thousands of concurrent merchant sessions</div>
+        <div class="cs-item"><div class="cs-dot"></div>Shipping rate and delivery service integrations across national and international carriers — label generation, order management, and carrier routing</div>
+        <div class="cs-item"><div class="cs-dot"></div>Cloud service integrations across queue systems, analytics pipelines, and 3PL/warehouse APIs for end-to-end logistics automation</div>
+        <div class="cs-item"><div class="cs-dot"></div>Infrastructure performance optimisation — improved reliability and reduced per-order processing overhead across the full stack</div>
+      </div>
+      <div class="tech-bar">
+        <span class="tech hi">React</span>
+        <span class="tech hi">TypeScript</span>
+        <span class="tech hi">Node.js</span>
+        <span class="tech hi">Python</span>
+        <span class="tech">REST APIs</span>
+        <span class="tech">PostgreSQL</span>
+        <span class="tech">AWS S3</span>
+        <span class="tech">FCM</span>
+        <span class="tech">Event pipelines</span>
+        <span class="tech">Carrier APIs</span>
+        <span class="tech">Shopify</span>
+        <span class="tech">Cloud queues</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: MOBILE APPS -->
+<div class="section">
+  <div class="wrap">
+    <div class="sec-label">Engagement 02 — Mobile Applications</div>
+    <div class="sec-title">iOS, Android & Cross-Platform Apps</div>
+    <p class="sec-desc">Two major long-term mobile engineering engagements: 5 years building VOIP calling and messaging apps for global telecoms (iOS and Android shipped across multiple markets), and 3.5 years on a grocery e-commerce platform acquired for $42M — covering native iOS, native Android, and full-stack backend work.</p>
+
+    <div class="product-row">
+
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <div class="mock-screen voip">
+            <div style="display:flex;gap:18px;align-items:center">
+              <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div style="text-align:center;margin:6px 0 3px">
+                  <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:11px">📞</div>
+                </div>
+                <div class="phone-metric" style="font-size:13px">01:24</div>
+                <div class="phone-metric-label">CONNECTED</div>
+                <div style="display:flex;gap:5px;margin-top:6px;justify-content:center">
+                  <div style="width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)"></div>
+                  <div style="width:17px;height:17px;border-radius:50%;background:rgba(210,50,50,0.35);border:1px solid rgba(210,50,50,0.25)"></div>
+                  <div style="width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)"></div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.12em">SIP-TO-GSM</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.12em">SIP-TO-SIP</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.12em">GROUP CHAT</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(52,211,153,0.5);letter-spacing:.12em">VOIP ACTIVE</div>
+              </div>
+            </div>
+            <div class="mock-label">Global VOIP platform · 5 years</div>
+          </div>
+        </div>
+        <div class="screen-label">
+          <span class="screen-name">VOIP Calling & Messaging Apps</span>
+          <span class="screen-tag tag-green">iOS & Android · Shipped globally</span>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <div class="mock-screen grocery">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div class="phone-line w80" style="margin-bottom:5px"></div>
+                <div style="display:flex;gap:4px;margin:3px 0">
+                  <div style="flex:1;height:34px;background:rgba(255,255,255,0.04);border-radius:4px;border:1px solid rgba(255,255,255,0.06)"></div>
+                  <div style="flex:1;height:34px;background:rgba(255,255,255,0.04);border-radius:4px;border:1px solid rgba(255,255,255,0.06)"></div>
+                </div>
+                <div class="phone-line w60" style="margin:4px 0"></div>
+                <div style="height:20px;background:rgba(52,211,153,0.18);border-radius:4px;border:1px solid rgba(52,211,153,0.2);display:flex;align-items:center;justify-content:center">
+                  <span style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(52,211,153,0.65)">ADD TO CART</span>
+                </div>
+                <div class="phone-line w45" style="margin-top:5px"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.1em">3 RETAIL BRANDS</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.1em">iOS + ANDROID</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:.1em">CLEAN ARCH</div>
+                <div style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(52,211,153,0.5);letter-spacing:.1em">$42M EXIT</div>
+              </div>
+            </div>
+            <div class="mock-label">Grocery e-commerce · $42M acquisition</div>
+          </div>
+        </div>
+        <div class="screen-label">
+          <span class="screen-name">Grocery E-Commerce Apps</span>
+          <span class="screen-tag tag-amber">iOS & Android · $42M acquired</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="contrib-strip">
+      <div class="cs-title">Mobile engineering depth</div>
+      <div class="cs-grid">
+        <div class="cs-item"><div class="cs-dot"></div>5 years building VOIP calling and messaging apps — SIP-to-SIP and SIP-to-GSM calling, group chat, media sharing, in-app billing — shipped to iOS and Android globally across multiple telecom brands</div>
+        <div class="cs-item"><div class="cs-dot"></div>3.5 years on grocery e-commerce mobile platform deployed across 3 major US retail brands — iOS and Android native apps, full-stack backend work. Platform acquired for $42M.</div>
+        <div class="cs-item"><div class="cs-dot"></div>Clean Architecture (MVP/MVVM) applied consistently across all mobile work — RxJava, Dagger 2, Room, Retrofit on Android; RxSwift, Codable, CoreData on iOS</div>
+        <div class="cs-item"><div class="cs-dot"></div>Real-time data streaming, push notifications (FCM/APNS), in-app purchases, GPS/location tracking, offline state management, and file upload across all platforms</div>
+        <div class="cs-item"><div class="cs-dot"></div>Cross-platform development: Flutter (Dart), native iOS (Swift/Objective-C), native Android (Kotlin/Java) — all at production scale with store submission experience</div>
+        <div class="cs-item"><div class="cs-dot"></div>App Store and Play Store full submission process — provisioning profiles, code signing, review handling, TestFlight/internal testing, app metadata and release management</div>
+      </div>
+      <div class="tech-bar">
+        <span class="tech hi">React Native</span>
+        <span class="tech hi">Expo</span>
+        <span class="tech hi">EAS Build</span>
+        <span class="tech hi">RN Reanimated</span>
+        <span class="tech hi">Gesture Handler</span>
+        <span class="tech">Flutter</span>
+        <span class="tech">Swift</span>
+        <span class="tech">Kotlin</span>
+        <span class="tech">Firebase Auth</span>
+        <span class="tech hi">FCM Push</span>
+        <span class="tech">WebRTC</span>
+        <span class="tech">SIP/VOIP</span>
+        <span class="tech">PDF rendering</span>
+        <span class="tech">Mapbox/GPS</span>
+        <span class="tech">Offline sync</span>
+      </div>
+    </div>
+
+    <div class="acq-banner">
+      <div class="acq-text">
+        <div class="acq-label">Platform Acquisition</div>
+        <div class="acq-headline">Grocery platform acquired for $42 million</div>
+        <div class="acq-sub">Kashif spent 3.5 years as a senior iOS and Android engineer on this grocery e-commerce platform — building and maintaining the mobile apps deployed across major US retail chains. The platform was acquired at $42M, which is the scale of the engineering involved.</div>
+      </div>
+      <div class="acq-stat">
+        <div class="acq-n">$42M</div>
+        <div class="acq-nl">Acquisition<br>value</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 3: STACK -->
+<div class="section">
+  <div class="wrap">
+    <div class="sec-label">Technical Stack</div>
+    <div class="sec-title">Full capability across mobile, backend, and cloud</div>
+    <p class="sec-desc">14 years of production-grade mobile and full-stack engineering. Highlighted items match directly to your project's required stack.</p>
+
+    <div class="stack-grid">
+      <div class="stack-cat">
+        <div class="stack-cat-name">Mobile</div>
+        <div class="stack-items">
+          <span class="si primary">React Native</span>
+          <span class="si primary">Expo</span>
+          <span class="si primary">EAS Build</span>
+          <span class="si">Flutter</span>
+          <span class="si">Swift</span>
+          <span class="si">Kotlin</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-name">Gestures & Animation</div>
+        <div class="stack-items">
+          <span class="si primary">RN Reanimated</span>
+          <span class="si primary">Gesture Handler</span>
+          <span class="si">RxJava</span>
+          <span class="si">RxSwift</span>
+          <span class="si">RxDart</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-name">Backend</div>
+        <div class="stack-items">
+          <span class="si primary">Node.js</span>
+          <span class="si primary">Python</span>
+          <span class="si">Express</span>
+          <span class="si">Fastify</span>
+          <span class="si">.NET Core</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-name">Database & Storage</div>
+        <div class="stack-items">
+          <span class="si primary">PostgreSQL</span>
+          <span class="si primary">AWS S3</span>
+          <span class="si">Supabase</span>
+          <span class="si">SQLite</span>
+          <span class="si">Firebase</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-name">Auth & Notifications</div>
+        <div class="stack-items">
+          <span class="si primary">Firebase Auth</span>
+          <span class="si primary">FCM</span>
+          <span class="si">Supabase Auth</span>
+          <span class="si">JWT</span>
+          <span class="si">APNS</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-name">Frontend & Tools</div>
+        <div class="stack-items">
+          <span class="si primary">TypeScript</span>
+          <span class="si primary">React</span>
+          <span class="si">Tailwind</span>
+          <span class="si">Cursor</span>
+          <span class="si">Claude Code</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: LIVE DEMOS -->
+<div class="section">
+  <div class="wrap">
+    <div class="sec-label">Live Demos</div>
+    <div class="sec-title">Working prototypes built for client proposals</div>
+    <p class="sec-desc">Each demo was built as a single self-contained HTML file deployed to Netlify - functional, client-ready, and shipped fast. These are not mockups. Every interaction works.</p>
+
+    <div class="stack-grid" style="grid-template-columns:repeat(2,1fr);gap:14px;">
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#0d1a10;height:120px;display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="font-family:var(--mono);font-size:11px;color:rgba(52,211,153,0.5);letter-spacing:.15em;text-align:center;">FLEET OPERATIONS<br><span style="font-size:18px;color:rgba(52,211,153,0.7);letter-spacing:.05em;">DASHBOARD</span></div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">FleetOps Operator Dashboard</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">Real-time micromobility fleet management platform. Live vehicle map, telemetry, trip management, and MQTT event simulation. Built for Gregory Burgess / LSV fleet client.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">React Native + Expo</span><span class="tech">MQTT</span><span class="tech">Mapbox</span><span class="tech">Socket.io</span>
+          </div>
+          <a href="https://69bc49b1ebfe8f36fe630113--jazzy-cuchufli-9a6842.netlify.app/" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View Live Demo</a>
+        </div>
+      </div>
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#faf8f5;height:120px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;color:#b8935a;font-style:italic;">Photo</div>
+            <div style="font-family:var(--mono);font-size:9px;color:#9a948e;letter-spacing:.15em;margin-top:2px;">PERSONALIZATION TOOL</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">PhotoPandora SVG Personalization Editor</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">5-step personalization editor with live SVG preview, ornament selection, font controls, order reference generation, and real-time backend data panel. Built for Audrius / photopandora.eu.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">Vanilla JS</span><span class="tech">SVG</span><span class="tech">Shopify</span><span class="tech">Admin Panel</span>
+          </div>
+          <a href="https://69bd33f2298f2d00ede25af9--luxury-fox-7cd81b.netlify.app/" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View Live Demo</a>
+        </div>
+      </div>
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#0a0c0f;height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;text-align:center;">
+            <div style="font-size:10px;color:rgba(240,165,0,0.5);letter-spacing:.2em;">U.S. COAST GUARD</div>
+            <div style="font-size:14px;color:rgba(240,165,0,0.8);margin-top:4px;">IMH Field Reference</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.2);margin-top:4px;letter-spacing:.15em;">OFFLINE READY</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">US Coast Guard IMH Field Reference App</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">Offline-first mobile field reference tool. Live Fuse.js search across ICS sections and roles, category navigation, checklists. Fully offline, zero backend.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">Vanilla JS</span><span class="tech">Fuse.js</span><span class="tech">Offline-first</span><span class="tech">React Native architecture</span>
+          </div>
+          <a href="https://69b9fc13a0aba6cc2bf96de2--luminous-licorice-9cbf39.netlify.app/" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View Live Demo</a>
+        </div>
+      </div>
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#111827;height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:rgba(59,130,246,0.5);font-family:monospace;letter-spacing:.1em;">AI-POWERED</div>
+            <div style="font-size:20px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:4px;">CFO Dashboard</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.2);margin-top:4px;letter-spacing:.12em;">FINANCIAL INTELLIGENCE</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">AI CFO Financial Intelligence Dashboard</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">Executive financial dashboard with AI-generated insights, revenue analytics, cash flow projections, and variance analysis. Built as a client proposal demo.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">React</span><span class="tech">Chart.js</span><span class="tech">OpenAI</span><span class="tech">Real-time data</span>
+          </div>
+          <a href="https://69bc15f5dc82d9d9f437a27c--delightful-mousse-e78c30.netlify.app/" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View Live Demo</a>
+        </div>
+      </div>
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#1a1614;height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:monospace;letter-spacing:.15em;">QA AUDIT SYSTEM</div>
+            <div style="font-size:18px;color:rgba(255,255,255,0.7);margin-top:6px;">QuickFlick TV</div>
+            <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
+              <span style="font-size:9px;background:rgba(59,130,246,0.2);color:rgba(59,130,246,0.7);padding:2px 8px;border-radius:3px;font-family:monospace;">SECTION A</span>
+              <span style="font-size:9px;background:rgba(139,127,212,0.2);color:rgba(139,127,212,0.7);padding:2px 8px;border-radius:3px;font-family:monospace;">SECTION B</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">QuickFlick TV Professional QA Audit Tool</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">Full QA audit system: 15 functional test cases, 7 Postman API tests, Playwright automation scripts, JMeter load simulation for 50 concurrent users, and auto-generated report email.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">Playwright</span><span class="tech">JMeter</span><span class="tech">Postman</span><span class="tech">Load testing</span>
+          </div>
+          <a href="https://69c3b4524c8d805a5257d5e0--musical-gingersnap-b3a70c.netlify.app/" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View Live Demo</a>
+        </div>
+      </div>
+
+      <div class="stack-cat" style="padding:0;overflow:hidden;">
+        <div style="background:#0f1e30;height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-family:monospace;font-size:28px;color:rgba(255,255,255,0.65);font-weight:600;">24.7 kg</div>
+            <div style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:.15em;margin-top:4px;">BLE FORCE SENSOR</div>
+            <div style="display:flex;gap:10px;margin-top:10px;justify-content:center;">
+              <div style="font-size:9px;background:rgba(59,130,246,0.2);color:rgba(59,130,246,0.6);padding:3px 10px;border-radius:3px;font-family:monospace;">ZERO</div>
+              <div style="font-size:9px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);padding:3px 10px;border-radius:3px;font-family:monospace;">kg/lb</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;">
+          <div class="stack-cat-name">DiscForce BLE iOS App UI</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px;">Real-time BLE force sensor display for spinal decompression device. Live force reading, peak tracking, ZERO command, kg/lb toggle, and PDF help overlay. iOS CoreBluetooth production app.</div>
+          <div class="tech-bar" style="margin-top:0;margin-bottom:12px;">
+            <span class="tech">Swift</span><span class="tech">CoreBluetooth</span><span class="tech">iOS</span><span class="tech">TestFlight</span>
+          </div>
+          <a href="https://69bc49b1ebfe8f36fe630113--jazzy-cuchufli-9a6842.netlify.app/discforce" target="_blank" class="btn btn-dark" style="font-size:12px;padding:8px 16px;display:inline-block;">View UI Demo</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="wrap">
+  <div class="page-footer">
+    <div>
+      <div class="footer-brand">Kashif Ilyas</div>
+      <div class="footer-sub">Senior Mobile & Full-Stack Engineer · Lahore, Pakistan</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/kashif-ilyas-1a6b9917/" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
+      <a href="https://www.upwork.com/freelancers/kashifilyas" target="_blank" class="btn btn-dark">Upwork Profile</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

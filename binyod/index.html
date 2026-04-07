@@ -1,1 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Weapon Finisher VFX — Impact Timing Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #0a0b0f;
+    --surface: #12141a;
+    --surface2:#191c25;
+    --border:  rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text:    #eef0f8;
+    --muted:   #4a5070;
+    --muted2:  #7880a8;
+    --red:     #ef4444;
+    --orange:  #f97316;
+    --yellow:  #fbbf24;
+    --cyan:    #22d3ee;
+    --purple:  #a855f7;
+    --green:   #22c55e;
+    --sans:    'Inter', -apple-system, sans-serif;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    background:var(--bg); color:var(--text);
+    font-family:var(--sans); font-size:14px;
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body { display:flex; flex-direction:column; align-items:center; padding:28px 16px 60px; }
+
+  /* ── HEADER ──────────────────────────────────────────────── */
+  .header { text-align:center; margin-bottom:28px; }
+  .header h1 {
+    font-size:20px; font-weight:800; letter-spacing:-0.04em;
+    margin-bottom:5px;
+  }
+  .header h1 span { color:var(--orange); }
+  .header p { font-size:13px; color:var(--muted2); }
+
+  /* ── MAIN STAGE ──────────────────────────────────────────── */
+  .stage-wrap {
+    width:100%; max-width:640px;
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:14px; overflow:hidden;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .stage-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 18px; background:var(--surface2);
+    border-bottom:1px solid var(--border);
+  }
+  .stage-title { font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .timing-badge {
+    font-size:10px; font-family:'Courier New', monospace;
+    background:rgba(249,115,22,0.12); color:var(--orange);
+    border:1px solid rgba(249,115,22,0.25);
+    padding:3px 10px; border-radius:5px; letter-spacing:.04em;
+  }
+
+  #stage {
+    display:block; width:100%; height:320px;
+    cursor:pointer;
+    background:linear-gradient(180deg, #06080e 0%, #0e1018 60%, #141820 100%);
+  }
+
+  .stage-footer {
+    padding:12px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px solid var(--border);
+  }
+  .hint { font-size:12px; color:var(--muted); }
+  .hint kbd {
+    background:var(--surface2); border:1px solid var(--border2);
+    border-radius:4px; padding:1px 7px; font-size:11px;
+    font-family:var(--sans); color:var(--muted2);
+  }
+
+  /* ── WEAPON SELECTOR ─────────────────────────────────────── */
+  .weapon-row {
+    width:100%; max-width:640px;
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:10px; margin-bottom:14px;
+  }
+  .weapon-btn {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:12px 10px;
+    cursor:pointer; transition:all .15s;
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    font-family:var(--sans);
+  }
+  .weapon-btn:hover { border-color:rgba(255,255,255,0.2); }
+  .weapon-btn.active {
+    border-color:var(--wep-color, var(--orange));
+    background:rgba(255,255,255,0.03);
+    box-shadow:0 0 16px rgba(249,115,22,0.15);
+  }
+  .wep-icon { font-size:22px; }
+  .wep-name { font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted2); }
+  .wep-tag  { font-size:9px; color:var(--muted); }
+
+  /* ── TIMELINE STRIP ──────────────────────────────────────── */
+  .timeline-card {
+    width:100%; max-width:640px;
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:12px; padding:16px 20px;
+    margin-bottom:14px;
+  }
+  .tl-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+  .tl-strip { position:relative; height:28px; }
+  .tl-track {
+    position:absolute; top:50%; left:0; right:0;
+    height:2px; background:var(--surface2);
+    transform:translateY(-50%);
+  }
+  .tl-progress {
+    position:absolute; top:50%; left:0;
+    height:2px; background:var(--orange);
+    transform:translateY(-50%);
+    transition:width .05s linear;
+    box-shadow:0 0 8px var(--orange);
+    width:0%;
+  }
+  .tl-events { position:absolute; top:0; left:0; right:0; bottom:0; }
+  .tl-event {
+    position:absolute; top:50%; transform:translate(-50%,-50%);
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+  }
+  .tl-dot {
+    width:10px; height:10px; border-radius:50%;
+    border:2px solid var(--surface);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .tl-event.fired .tl-dot { transform:scale(1.5); box-shadow:0 0 8px currentColor; }
+  .tl-event-label {
+    font-size:8px; font-family:'Courier New', monospace;
+    color:var(--muted2); white-space:nowrap;
+    position:absolute; top:16px;
+  }
+  .tl-event:nth-child(odd) .tl-event-label { top:auto; bottom:16px; }
+
+  /* ── STATS ROW ───────────────────────────────────────────── */
+  .stats-row {
+    width:100%; max-width:640px;
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+  .stat-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:12px 14px; text-align:center;
+  }
+  .stat-label { font-size:9px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .stat-val   { font-size:18px; font-weight:800; letter-spacing:-0.03em; font-variant-numeric:tabular-nums; }
+
+  @media (max-width:500px) {
+    .weapon-row { grid-template-columns:1fr 1fr; }
+    .stats-row  { grid-template-columns:1fr 1fr; }
+    #stage { height:260px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Weapon Finisher <span>VFX</span> — Impact Timing</h1>
+  <p>Click stage or press Space to trigger finisher · Switch weapons to see different effects</p>
+</div>
+
+<!-- STAGE -->
+<div class="stage-wrap">
+  <div class="stage-bar">
+    <div class="stage-title" id="wep-label">Knife Finisher</div>
+    <div class="timing-badge" id="timing-badge">Ready</div>
+  </div>
+  <canvas id="stage" onclick="triggerFinisher()" tabindex="0"></canvas>
+  <div class="stage-footer">
+    <div class="hint"><kbd>Space</kbd> or click to trigger finisher</div>
+    <div class="hint" id="frame-counter" style="font-family:'Courier New',monospace;font-size:11px;color:var(--muted)">Frame: 0</div>
+  </div>
+</div>
+
+<!-- WEAPON SELECTOR -->
+<div class="weapon-row">
+  <div class="weapon-btn active" id="wbtn-0" style="--wep-color:#fbbf24" onclick="selectWeapon(0)">
+    <div class="wep-icon">🔪</div>
+    <div class="wep-name">Knife</div>
+    <div class="wep-tag">Sharp · Fast</div>
+  </div>
+  <div class="weapon-btn" id="wbtn-1" style="--wep-color:#22d3ee" onclick="selectWeapon(1)">
+    <div class="wep-icon">🔫</div>
+    <div class="wep-name">Pistol</div>
+    <div class="wep-tag">Bang · Impact</div>
+  </div>
+  <div class="weapon-btn" id="wbtn-2" style="--wep-color:#a855f7" onclick="selectWeapon(2)">
+    <div class="wep-icon">⚡</div>
+    <div class="wep-name">Energy</div>
+    <div class="wep-tag">Surge · Glow</div>
+  </div>
+  <div class="weapon-btn" id="wbtn-3" style="--wep-color:#ef4444" onclick="selectWeapon(3)">
+    <div class="wep-icon">💣</div>
+    <div class="wep-name">Explosive</div>
+    <div class="wep-tag">Boom · Shake</div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-card">
+  <div class="tl-label">Finisher Timeline — Frame Sequence</div>
+  <div class="tl-strip">
+    <div class="tl-track"></div>
+    <div class="tl-progress" id="tl-progress"></div>
+    <div class="tl-events" id="tl-events"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">Hit Stop</div>
+    <div class="stat-val" id="stat-hitstop" style="color:var(--orange)">0ms</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Peak Particles</div>
+    <div class="stat-val" id="stat-particles" style="color:var(--cyan)">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Duration</div>
+    <div class="stat-val" id="stat-duration" style="color:var(--purple)">0ms</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Triggers</div>
+    <div class="stat-val" id="stat-triggers" style="color:var(--green)">0</div>
+  </div>
+</div>
+
+<script>
+// ── CANVAS SETUP ──────────────────────────────────────────────────────────
+const C  = document.getElementById('stage');
+const X  = C.getContext('2d');
+let W, H;
+
+function resize() {
+  const rect = C.parentElement.getBoundingClientRect();
+  C.width  = W = rect.width;
+  C.height = H = C.offsetHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── WEAPON DEFINITIONS ────────────────────────────────────────────────────
+const WEAPONS = [
+  {
+    name: 'Knife Finisher', color:'#fbbf24', glow:'rgba(251,191,36,',
+    hitstop: 80, duration: 1200,
+    events: [
+      { pct:0,   label:'swing',    color:'#fbbf24' },
+      { pct:0.2, label:'contact',  color:'#f97316' },
+      { pct:0.25,label:'hitstop',  color:'#ef4444' },
+      { pct:0.4, label:'slash',    color:'#fbbf24' },
+      { pct:0.6, label:'blood',    color:'#ef4444' },
+      { pct:0.85,label:'resolve',  color:'#6b7280' },
+    ],
+    spawn: spawnKnifeFinisher,
+  },
+  {
+    name: 'Pistol Finisher', color:'#22d3ee', glow:'rgba(34,211,238,',
+    hitstop: 120, duration: 1400,
+    events: [
+      { pct:0,   label:'aim',      color:'#22d3ee' },
+      { pct:0.15,label:'shot',     color:'#fbbf24' },
+      { pct:0.18,label:'hitstop',  color:'#ef4444' },
+      { pct:0.3, label:'impact',   color:'#f97316' },
+      { pct:0.5, label:'debris',   color:'#94a3b8' },
+      { pct:0.8, label:'resolve',  color:'#6b7280' },
+    ],
+    spawn: spawnPistolFinisher,
+  },
+  {
+    name: 'Energy Finisher', color:'#a855f7', glow:'rgba(168,85,247,',
+    hitstop: 60, duration: 1600,
+    events: [
+      { pct:0,   label:'charge',   color:'#a855f7' },
+      { pct:0.3, label:'release',  color:'#c084fc' },
+      { pct:0.35,label:'hitstop',  color:'#ef4444' },
+      { pct:0.45,label:'surge',    color:'#818cf8' },
+      { pct:0.65,label:'dissolve', color:'#a855f7' },
+      { pct:0.9, label:'resolve',  color:'#6b7280' },
+    ],
+    spawn: spawnEnergyFinisher,
+  },
+  {
+    name: 'Explosive Finisher', color:'#ef4444', glow:'rgba(239,68,68,',
+    hitstop: 180, duration: 1800,
+    events: [
+      { pct:0,   label:'arm',      color:'#f97316' },
+      { pct:0.2, label:'detonate', color:'#ef4444' },
+      { pct:0.22,label:'hitstop',  color:'#ef4444' },
+      { pct:0.35,label:'blast',    color:'#fbbf24' },
+      { pct:0.55,label:'debris',   color:'#f97316' },
+      { pct:0.8, label:'smoke',    color:'#6b7280' },
+    ],
+    spawn: spawnExplosiveFinisher,
+  },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let currentWeapon = 0;
+let particles     = [];
+let slashLines    = [];
+let rings         = [];
+let screenShake   = { x:0, y:0, str:0 };
+let hitStop       = 0;
+let flashAlpha    = 0;
+let flashColor    = '#fff';
+let frame         = 0;
+let triggerCount  = 0;
+let playing       = false;
+let playStart     = 0;
+let peakParticles = 0;
+let animFrame;
+
+// ── TIMELINE ──────────────────────────────────────────────────────────────
+function buildTimeline(wep) {
+  const el = document.getElementById('tl-events');
+  el.innerHTML = wep.events.map((e,i) => `
+    <div class="tl-event" id="tl-ev-${i}" style="left:${e.pct*100}%">
+      <div class="tl-dot" style="background:${e.color};color:${e.color}"></div>
+      <div class="tl-event-label" style="color:${e.color}">${e.label}</div>
+    </div>
+  `).join('');
+  document.getElementById('tl-progress').style.width = '0%';
+  document.getElementById('stat-hitstop').textContent = wep.hitstop + 'ms';
+  document.getElementById('stat-duration').textContent = wep.duration + 'ms';
+}
+
+function updateTimeline(pct, wep) {
+  document.getElementById('tl-progress').style.width = (pct*100) + '%';
+  wep.events.forEach((e,i) => {
+    const el = document.getElementById('tl-ev-'+i);
+    if (el) el.classList.toggle('fired', pct >= e.pct);
+  });
+}
+
+// ── WEAPON SELECT ─────────────────────────────────────────────────────────
+function selectWeapon(idx) {
+  currentWeapon = idx;
+  document.querySelectorAll('.weapon-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  const wep = WEAPONS[idx];
+  document.getElementById('wep-label').textContent = wep.name;
+  buildTimeline(wep);
+  document.getElementById('timing-badge').textContent = 'Ready';
+  document.getElementById('tl-progress').style.width = '0%';
+  document.querySelectorAll('.tl-event').forEach(e => e.classList.remove('fired'));
+}
+
+// ── PARTICLE HELPERS ──────────────────────────────────────────────────────
+function addParticle(opts) {
+  particles.push({
+    x:opts.x, y:opts.y,
+    vx:opts.vx||0, vy:opts.vy||0,
+    r:opts.r||4, life:1, decay:opts.decay||0.025,
+    color:opts.color||'#fff',
+    grav:opts.grav??0.15,
+    shape:opts.shape||'circle',
+    rot:Math.random()*Math.PI*2,
+    rotV:(Math.random()-.5)*0.25,
+    glow:opts.glow||false,
+  });
+}
+
+function addRing(x,y,color,speed,maxR,thick) {
+  rings.push({ x,y,r:8,color,speed:speed||4,maxR:maxR||120,thick:thick||3,alpha:1 });
+}
+
+function addSlash(x1,y1,x2,y2,color,width,life) {
+  slashLines.push({x1,y1,x2,y2,color,width:width||3,life:life||1,decay:0.06});
+}
+
+// ── FINISHER SEQUENCES ────────────────────────────────────────────────────
+function spawnKnifeFinisher(cx,cy) {
+  // slash lines
+  for(let i=0;i<5;i++) {
+    const a = -0.4 + i*0.18;
+    addSlash(
+      cx - Math.cos(a)*80, cy - Math.sin(a)*80,
+      cx + Math.cos(a)*100, cy + Math.sin(a)*100,
+      '#fbbf24', 4-i*0.5, 1
+    );
+  }
+  // core burst
+  for(let i=0;i<28;i++) {
+    const a=(i/28)*Math.PI*2;
+    const spd=4+Math.random()*8;
+    addParticle({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-2,
+      r:3+Math.random()*5,color:i%3===0?'#fff':'#fbbf24',
+      decay:0.02+Math.random()*0.02,glow:true});
+  }
+  // blood drops
+  for(let i=0;i<16;i++) {
+    addParticle({x:cx+(Math.random()-.5)*40,y:cy+(Math.random()-.5)*20,
+      vx:(Math.random()-.5)*6,vy:-Math.random()*4-2,
+      r:2+Math.random()*4,color:'#ef4444',
+      decay:0.018,grav:0.25,shape:Math.random()>.5?'circle':'square'});
+  }
+  addRing(cx,cy,'#fbbf24',5,100,3);
+  addRing(cx,cy,'#f97316',3,60,2);
+  screenShake.str = 10;
+  hitStop = 5;
+  flashAlpha = 0.4; flashColor = '#fbbf24';
+}
+
+function spawnPistolFinisher(cx,cy) {
+  // muzzle flash
+  flashAlpha = 0.6; flashColor = '#fbbf24';
+  // bullet trail (fast line)
+  addSlash(cx-W*0.25,cy,cx,cy,'#fbbf24',6,1);
+  // impact burst - directional
+  for(let i=0;i<35;i++) {
+    const a = -0.5+(Math.random()-0.5)*Math.PI;
+    const spd = 5+Math.random()*12;
+    addParticle({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,
+      r:2+Math.random()*6,
+      color:['#fbbf24','#f97316','#fff','#22d3ee'][i%4],
+      decay:0.02+Math.random()*0.025,glow:true,grav:0.2});
+  }
+  // sparks
+  for(let i=0;i<20;i++) {
+    addParticle({x:cx,y:cy,vx:(Math.random()-.5)*14,vy:-Math.random()*6-3,
+      r:1.5+Math.random()*2.5,color:'#fbbf24',decay:0.03,grav:0.3,shape:'circle'});
+  }
+  addRing(cx,cy,'#22d3ee',6,140,4);
+  addRing(cx,cy,'#fbbf24',3,80,2);
+  screenShake.str = 14;
+  hitStop = 7;
+}
+
+function spawnEnergyFinisher(cx,cy) {
+  // charge-up rings (pre-spawn)
+  for(let i=0;i<4;i++) {
+    setTimeout(()=>addRing(cx,cy,'#a855f7',2+i,40+i*20,2),i*60);
+  }
+  // energy burst
+  for(let i=0;i<40;i++) {
+    const a=(i/40)*Math.PI*2;
+    const spd=3+Math.random()*10;
+    addParticle({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,
+      r:3+Math.random()*6,
+      color:['#a855f7','#c084fc','#818cf8','#fff'][i%4],
+      decay:0.015+Math.random()*0.02,glow:true,grav:0.05});
+  }
+  // lightning-style slashes
+  for(let i=0;i<6;i++) {
+    const a=(i/6)*Math.PI*2;
+    addSlash(cx,cy,cx+Math.cos(a)*90,cy+Math.sin(a)*90,'#c084fc',2,1);
+  }
+  addRing(cx,cy,'#a855f7',8,200,6);
+  addRing(cx,cy,'#fff',4,100,2);
+  screenShake.str = 8;
+  hitStop = 4;
+  flashAlpha = 0.35; flashColor = '#a855f7';
+}
+
+function spawnExplosiveFinisher(cx,cy) {
+  // massive burst
+  for(let i=0;i<60;i++) {
+    const a=(i/60)*Math.PI*2;
+    const spd=6+Math.random()*18;
+    addParticle({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-3,
+      r:4+Math.random()*10,
+      color:['#fbbf24','#f97316','#ef4444','#fff'][i%4],
+      decay:0.01+Math.random()*0.02,glow:true,grav:0.22});
+  }
+  // smoke
+  for(let i=0;i<20;i++) {
+    addParticle({x:cx+(Math.random()-.5)*60,y:cy+(Math.random()-.5)*40,
+      vx:(Math.random()-.5)*4,vy:-Math.random()*3-1,
+      r:12+Math.random()*20,color:'rgba(100,100,100,0.4)',
+      decay:0.008,grav:-0.05,shape:'circle'});
+  }
+  // shockwave rings
+  for(let i=0;i<5;i++) {
+    setTimeout(()=>addRing(cx,cy,'#fbbf24',7+i*2,180+i*40,5-i),i*50);
+  }
+  screenShake.str = 22;
+  hitStop = 12;
+  flashAlpha = 0.8; flashColor = '#f97316';
+
+  // secondary debris
+  setTimeout(()=>{
+    for(let i=0;i<20;i++) {
+      addParticle({x:cx+(Math.random()-.5)*80,y:cy-30,
+        vx:(Math.random()-.5)*8,vy:-Math.random()*5,
+        r:3+Math.random()*6,color:'#6b7280',
+        decay:0.015,grav:0.3,shape:'square'});
+    }
+  },150);
+}
+
+// ── TRIGGER ───────────────────────────────────────────────────────────────
+function triggerFinisher() {
+  if (playing) return;
+  const wep = WEAPONS[currentWeapon];
+  const cx = W/2, cy = H*0.45;
+
+  particles=[]; slashLines=[]; rings=[];
+  playing=true; playStart=Date.now();
+  triggerCount++;
+  peakParticles=0;
+
+  document.getElementById('timing-badge').textContent = '▶ Playing';
+  document.getElementById('stat-triggers').textContent = triggerCount;
+
+  wep.spawn(cx,cy);
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.code==='Space'){e.preventDefault();triggerFinisher();}
+});
+
+// ── DRAW BG ────────────────────────────────────────────────────────────────
+function drawBg() {
+  const wep = WEAPONS[currentWeapon];
+
+  // Sky gradient
+  const g=X.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#04050a');
+  g.addColorStop(1,'#0c0e14');
+  X.fillStyle=g; X.fillRect(0,0,W,H);
+
+  // Grid
+  X.strokeStyle='rgba(255,255,255,0.03)'; X.lineWidth=1;
+  const gs=48;
+  for(let x=0;x<W;x+=gs){X.beginPath();X.moveTo(x,0);X.lineTo(x,H);X.stroke();}
+  for(let y=0;y<H;y+=gs){X.beginPath();X.moveTo(0,y);X.lineTo(W,y);X.stroke();}
+
+  // Ground
+  X.fillStyle='#0d1018'; X.fillRect(0,H*0.72,W,H*0.28);
+  X.fillStyle='rgba(255,255,255,0.05)'; X.fillRect(0,H*0.72,W,1);
+
+  // Target dummy
+  const cx=W/2, cy=H*0.45;
+  const dh=H*0.28, dw=H*0.1;
+
+  // Shadow
+  X.fillStyle='rgba(0,0,0,0.4)';
+  X.beginPath();X.ellipse(cx,H*0.72,dw*.8,dw*.18,0,0,Math.PI*2);X.fill();
+
+  // Body
+  X.fillStyle='#1c1f2a';
+  X.strokeStyle='rgba(255,255,255,0.08)';
+  X.lineWidth=2;
+  X.beginPath();X.roundRect(cx-dw/2,cy-dh/2,dw,dh,8);X.fill();X.stroke();
+
+  // Head
+  X.fillStyle='#252836';
+  X.beginPath();X.arc(cx,cy-dh/2-dw*.4,dw*.4,0,Math.PI*2);X.fill();X.stroke();
+
+  // Crosshair
+  X.strokeStyle=wep.color+'60'; X.lineWidth=1; X.setLineDash([3,3]);
+  X.beginPath();X.moveTo(cx-30,cy);X.lineTo(cx+30,cy);X.stroke();
+  X.beginPath();X.moveTo(cx,cy-30);X.lineTo(cx,cy+30);X.stroke();
+  X.setLineDash([]);
+}
+
+// ── MAIN LOOP ──────────────────────────────────────────────────────────────
+function loop() {
+  animFrame = requestAnimationFrame(loop);
+  frame++;
+
+  // Hit stop
+  if(hitStop>0){hitStop--;return;}
+
+  // Screen shake
+  if(screenShake.str>0.2){
+    screenShake.x=(Math.random()-.5)*screenShake.str*2;
+    screenShake.y=(Math.random()-.5)*screenShake.str*2;
+    screenShake.str*=0.82;
+  } else {screenShake.x=0;screenShake.y=0;}
+
+  X.save();
+  X.translate(screenShake.x,screenShake.y);
+
+  drawBg();
+
+  // Flash
+  if(flashAlpha>0.01){
+    X.fillStyle=flashColor;
+    X.globalAlpha=flashAlpha*0.22;
+    X.fillRect(-20,-20,W+40,H+40);
+    X.globalAlpha=1;
+    flashAlpha*=0.85;
+  }
+
+  // Rings
+  for(let i=rings.length-1;i>=0;i--) {
+    const r=rings[i];
+    X.globalAlpha=r.alpha;
+    X.strokeStyle=r.color;
+    X.lineWidth=r.thick;
+    X.beginPath();X.arc(r.x,r.y,r.r,0,Math.PI*2);X.stroke();
+    r.r+=r.speed; r.alpha-=0.035;
+    if(r.r>r.maxR||r.alpha<=0) rings.splice(i,1);
+  }
+  X.globalAlpha=1;
+
+  // Slash lines
+  for(let i=slashLines.length-1;i>=0;i--) {
+    const s=slashLines[i];
+    X.globalAlpha=s.life;
+    X.strokeStyle=s.color;
+    X.lineWidth=s.width;
+    X.lineCap='round';
+    X.beginPath();X.moveTo(s.x1,s.y1);X.lineTo(s.x2,s.y2);X.stroke();
+    s.life-=s.decay;
+    if(s.life<=0) slashLines.splice(i,1);
+  }
+  X.globalAlpha=1;
+
+  // Particles
+  let activeP=0;
+  for(let i=particles.length-1;i>=0;i--) {
+    const p=particles[i];
+    if(p.life<=0){particles.splice(i,1);continue;}
+    p.vy+=p.grav; p.x+=p.vx; p.y+=p.vy;
+    p.rot+=p.rotV; p.life-=p.decay; p.vx*=0.98;
+    activeP++;
+
+    X.globalAlpha=Math.max(0,p.life);
+    if(p.glow){X.shadowBlur=12;X.shadowColor=p.color;}
+    X.fillStyle=p.color;
+
+    if(p.shape==='square'){
+      X.save();X.translate(p.x,p.y);X.rotate(p.rot);
+      X.fillRect(-p.r,-p.r,p.r*2,p.r*2);
+      X.restore();
+    } else {
+      X.beginPath();X.arc(p.x,p.y,p.r*(0.5+p.life*0.5),0,Math.PI*2);X.fill();
+    }
+    X.shadowBlur=0;
+  }
+  X.globalAlpha=1;
+  X.restore();
+
+  if(activeP>peakParticles) peakParticles=activeP;
+  document.getElementById('stat-particles').textContent=peakParticles;
+  document.getElementById('frame-counter').textContent='Particles: '+activeP;
+
+  // Timeline update
+  if(playing) {
+    const wep=WEAPONS[currentWeapon];
+    const elapsed=Date.now()-playStart;
+    const pct=Math.min(1,elapsed/wep.duration);
+    updateTimeline(pct,wep);
+    document.getElementById('timing-badge').textContent = pct<1 ? '▶ '+Math.round(elapsed)+'ms' : '✓ Complete';
+    if(pct>=1) playing=false;
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+selectWeapon(0);
+loop();
+</script>
+</body>
+</html>
 
